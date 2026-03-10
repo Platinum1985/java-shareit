@@ -1,7 +1,9 @@
 package ru.practicum.shareit.booking.dto;
 
-/**
- * TODO Sprint add-bookings.
- */
-public class BookingDto {
+import lombok.Data;
+import org.springframework.stereotype.Component;
+
+@Data
+@Component
+public final class BookingDto {
 }
