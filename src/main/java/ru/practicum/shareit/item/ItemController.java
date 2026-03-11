@@ -3,7 +3,6 @@ package ru.practicum.shareit.item;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.exceptions.NotFoundException;
 import ru.practicum.shareit.exceptions.ValidationException;
@@ -22,40 +21,37 @@ public class ItemController {
     private final ItemService itemService;
 
     @PostMapping
-    public ResponseEntity<Item> createItem(@RequestBody ItemDto itemDto, @RequestHeader("X-Sharer-User-Id") int ownerId) {
+    @ResponseStatus(HttpStatus.CREATED)
+    public Item createItem(@RequestBody ItemDto itemDto, @RequestHeader("X-Sharer-User-Id") int ownerId) {
         itemDto.setOwner(ownerId);
         log.info("itemDto = {} in controller", itemDto);
-        Item item = itemService.addItem(itemDto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(item);
+        return itemService.addItem(itemDto);
     }
 
     @PatchMapping("/{itemId}")
-    public ResponseEntity<Item> updateItem(@PathVariable int itemId,
-                                           @RequestBody ItemDto itemDto,
-                                           @RequestHeader("X-Sharer-User-Id") int ownerId) {
+    @ResponseStatus(HttpStatus.OK)
+    public Item updateItem(@PathVariable int itemId,
+                           @RequestBody ItemDto itemDto,
+                           @RequestHeader("X-Sharer-User-Id") int ownerId) {
         itemDto.setId(itemId);
         itemDto.setOwner(ownerId);
-        Item patchededItem = itemService.patchItem(itemDto, ownerId);
-        return ResponseEntity.ok(patchededItem);
+        return itemService.patchItem(itemDto, ownerId);
     }
 
     @GetMapping("/{itemId}")
-    public ResponseEntity<ItemDto> getItemById(@PathVariable int itemId) {
-        ItemDto itemDto = itemService.getItemById(itemId);
-        return ResponseEntity.ok(itemDto);
+    public ItemDto getItemById(@PathVariable int itemId) {
+        return itemService.getItemById(itemId);
     }
 
     @GetMapping
-    public ResponseEntity<List<Item>> getAllItemsForOwner(@RequestHeader("X-Sharer-User-Id") int ownerId) {
-        List<Item> items = itemService.getAllItemsForOwner(ownerId);
-        return ResponseEntity.ok(items);
+    public List<Item> getAllItemsForOwner(@RequestHeader("X-Sharer-User-Id") int ownerId) {
+        return itemService.getAllItemsForOwner(ownerId);
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<Item>> searchItems(@RequestParam("text") String text) {
+    public List<Item> searchItems(@RequestParam("text") String text) {
         log.info("in controller text = {}", text);
-        List<Item> items = itemService.searchAvailableItems(text);
-        return ResponseEntity.ok(items);
+        return itemService.searchAvailableItems(text);
     }
 
     @ExceptionHandler(NotFoundException.class)

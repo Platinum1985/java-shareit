@@ -60,25 +60,20 @@ public class UserStorage {
     }
 
     public void deleteUserById(int id) {
-        Optional<User> optionalUser = users.stream()
+        User user = users.stream()
                 .filter(u -> u.getId() == id)
-                .findFirst();
+                .findFirst()
+                .orElseThrow(() -> new NotFoundException("Пользователь с ID {} не найден"));
 
-        if (optionalUser.isPresent()) {
-            users.remove(optionalUser.get());
-            log.info("Пользователь с ID {} успешно удалён", id);
-        } else {
-            throw new NotFoundException("Пользователь с ID {} не найден");
-        }
+        users.remove(user);
+        log.info("Пользователь с ID {} успешно удалён", id);
     }
 
     public User findUserById(int id) {
-        Optional<User> optionalUser = users.stream().filter(u -> u.getId() == id).findFirst();
-        if (optionalUser.isEmpty()) {
-            throw new NotFoundException("Пользователь с таким id не найден");
-        } else {
-            return optionalUser.get();
-        }
+        return users.stream()
+                .filter(u -> u.getId() == id)
+                .findFirst()
+                .orElseThrow(() -> new NotFoundException("Пользователь с таким id не найден"));
     }
 
     public boolean checkDuplicateEmail(String email) {

@@ -1,7 +1,6 @@
 package ru.practicum.shareit.request;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.request.dto.ItemRequestDto;
 
@@ -17,9 +16,9 @@ public class ItemRequestController {
     }
 
     @PostMapping
-    public ResponseEntity<ItemRequest> createItemRequest(@RequestBody ItemRequestDto itemRequestDto, @RequestHeader int requestorId) {
-        ItemRequest itemRequest = itemRequestService.addItemRequest(itemRequestDto, requestorId);
-        return ResponseEntity.status(HttpStatus.CREATED).body(itemRequest);
+    @ResponseStatus(HttpStatus.CREATED)
+    public ItemRequest createItemRequest(@RequestBody ItemRequestDto itemRequestDto, @RequestHeader int requestorId) {
+        return itemRequestService.addItemRequest(itemRequestDto, requestorId);
     }
 
     @GetMapping

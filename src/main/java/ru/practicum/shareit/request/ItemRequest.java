@@ -12,7 +12,7 @@ public class ItemRequest {
     private int id;
     private String description;
     private User requestor; // пользователь создавший запрос
-    LocalDateTime created; // дата и время создания запроса
+    private LocalDateTime created; // дата и время создания запроса
 
     public ItemRequest(String description, User requestor) {
         this.description = description;
