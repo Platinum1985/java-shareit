@@ -17,7 +17,7 @@ public class UserStorage {
     private final List<User> users = new ArrayList<>();
     private int id = 1;
 
-    public User addUser(User user) {
+   /* public User addUser(User user) {
         if (checkDuplicateEmail(user.getEmail())) {
             throw new DataBaseException("Такой email уже используется");
         }
@@ -33,7 +33,7 @@ public class UserStorage {
         } else {
             throw new DataBaseException("Ошибка при добавлении пользователя");
         }
-    }
+    } */
 
     public User updateUser(User user) {
         Optional<User> optionalUser = users.stream()
@@ -59,16 +59,16 @@ public class UserStorage {
         return user;
     }
 
-    public void deleteUserById(int id) {
-        User user = users.stream()
-                .filter(u -> u.getId() == id)
-                .findFirst()
-                .orElseThrow(() -> new NotFoundException("Пользователь с ID {} не найден"));
+    /* public void deleteUserById(int id) {
+         User user = users.stream()
+                 .filter(u -> u.getId() == id)
+                 .findFirst()
+                 .orElseThrow(() -> new NotFoundException("Пользователь с ID {} не найден"));
 
-        users.remove(user);
-        log.info("Пользователь с ID {} успешно удалён", id);
-    }
-
+         users.remove(user);
+         log.info("Пользователь с ID {} успешно удалён", id);
+     }
+ */
     public User findUserById(int id) {
         return users.stream()
                 .filter(u -> u.getId() == id)

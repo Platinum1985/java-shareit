@@ -64,7 +64,7 @@ public class UserController {
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public Map<String, String> handleGeneralException(Exception e) {
-        return Map.of("error", "Произошла внутренняя ошибка сервера.");
+        return Map.of("error", e.getMessage());
     }
 }
 

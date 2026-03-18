@@ -69,6 +69,6 @@ public class ItemController {
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public Map<String, String> handleGeneralException(Exception e) {
-        return Map.of("error", "Произошла внутренняя ошибка сервера.");
+        return Map.of("error внутр ошибка бд", e.getMessage());
     }
 }

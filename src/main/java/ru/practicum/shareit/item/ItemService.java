@@ -3,6 +3,7 @@ package ru.practicum.shareit.item;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import ru.practicum.shareit.exceptions.DataBaseException;
 import ru.practicum.shareit.exceptions.NotFoundException;
 import ru.practicum.shareit.exceptions.ValidationException;
 import ru.practicum.shareit.item.dto.ItemDto;
@@ -23,6 +24,7 @@ public class ItemService {
     private final ItemStorage itemStorage;
     private final UserService userService;
     private final ItemRequestService itemRequestService;
+    private final ItemRepository itemRepository;
 
     public Item addItem(ItemDto itemDto) {
         if (!validationItemDto(itemDto)) {
@@ -37,29 +39,39 @@ public class ItemService {
         User owner = userService.getUserById(itemDto.getOwner());
         item.setOwner(owner);
         log.info("item = {} сервис после IF", item);
-        return itemStorage.saveItem(item);
+        return itemRepository.save(item);
     }
 
     public Item patchItem(ItemDto itemDto, int ownerId) {
-        Item item = itemStorage.getItemById(itemDto.getId());
+        Item item = itemRepository.findById(itemDto.getId()).orElseThrow(() -> new DataBaseException("Item с таким id не найден"));
         if (item.getOwner().getId() == ownerId) {
-            item.setName(itemDto.getName());
-            item.setDescription(itemDto.getDescription());
-            item.setAvailable(itemDto.getAvailable());
-            return item;
+            if (itemDto.getName() != null && !itemDto.getName().isBlank()) {
+                item.setName(itemDto.getName());
+            }
+            if (itemDto.getDescription() != null && !itemDto.getDescription().isBlank()) {
+                item.setDescription(itemDto.getDescription());
+            }
+            if (itemDto.getAvailable() != null) {
+                item.setAvailable(itemDto.getAvailable());
+            }
+            return itemRepository.save(item);
         } else {
             throw new NotFoundException("You are not the owner of this item");
         }
     }
 
     public ItemDto getItemById(int itemId) {
-        ItemDto itemDto = ItemDtoMapper.toItemDto(itemStorage.getItemById(itemId));
+        ItemDto itemDto = ItemDtoMapper.toItemDto(itemRepository.findById(itemId).orElseThrow(() -> new NotFoundException("Item not found")));
         log.info("itemDto in service = {}", itemDto);
         return itemDto;
     }
 
     public List<Item> getAllItemsForOwner(int ownerId) {
-        return itemStorage.getItemsForOwner(ownerId);
+        User owner = userService.getUserById(ownerId);
+        System.out.println("Полученный пользователь: " + owner);
+        List<Item> items = itemRepository.findByOwner(owner);
+        System.out.println("Количество элементов: " + items.size());
+        return items;
     }
 
     public List<Item> searchAvailableItems(String searchText) {
@@ -67,7 +79,7 @@ public class ItemService {
         if (searchText.isBlank()) {
             return new ArrayList<>();
         }
-        return itemStorage.getAllItems().stream()
+        return itemRepository.findAll().stream()
                 .filter(item -> item.getAvailable() != null && item.getAvailable().booleanValue()
                         && (item.getName() != null && item.getName().toLowerCase().contains(searchText.toLowerCase())
                         || item.getDescription() != null && item.getDescription().toLowerCase().contains(searchText.toLowerCase())))
