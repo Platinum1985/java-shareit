@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import ru.practicum.shareit.item.model.Item;
-import ru.practicum.shareit.user.User;
+
 
 import java.time.Instant;
 

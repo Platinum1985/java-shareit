@@ -40,6 +40,7 @@ public class BookingController {
         log.info("Getting bookings for booker {} with state: {}", bookerId, state);
         return bookingService.getBookerBookings(bookerId, state);
     }
+
     @GetMapping("/owner")
     public List<Booking> getUserBookings(@RequestHeader("X-Sharer-User-Id") int ownerId, @RequestParam(value = "state", required = false) String state) {
         log.info("Getting bookings for owner {} with state: {}", ownerId, state);

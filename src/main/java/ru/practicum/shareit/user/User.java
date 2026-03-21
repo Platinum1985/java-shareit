@@ -3,7 +3,6 @@ package ru.practicum.shareit.user;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Generated;
 
 @Data
 @EqualsAndHashCode(of = {"id"})

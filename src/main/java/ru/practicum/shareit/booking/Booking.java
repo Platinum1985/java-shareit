@@ -37,15 +37,17 @@ public class Booking {
     private Status status;
 
     public Booking(LocalDateTime start, LocalDateTime end, Item item, User booker, Status status) {
-        this.start=start;
-        this.booker=booker;
-        this.end=end;
-        this.status=status;
-        this.item=item;
+        this.start = start;
+        this.booker = booker;
+        this.end = end;
+        this.status = status;
+        this.item = item;
     }
-    public Booking(){
+
+    public Booking() {
 
     }
+
     @Override
     public String toString() {
         return "Booking{" +

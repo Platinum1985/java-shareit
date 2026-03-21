@@ -61,10 +61,6 @@ public class ItemController {
         log.info("in controller text = {}", text);
         return itemService.searchAvailableItems(text);
     }
-   /* @PostMapping("/{itemId}/comment")
-    public Comment addComment(@PathVariable int itemId, @RequestBody CommentRequest commentRequest, @RequestHeader int bookerId) {
-        return itemService.addComment(itemId, commentRequest, bookerId);
-    } */
 
     @ExceptionHandler(NotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
