@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.shareit.comment.Comment;
+import ru.practicum.shareit.comment.CommentRequest;
 import ru.practicum.shareit.exceptions.NotFoundException;
 import ru.practicum.shareit.exceptions.ValidationException;
 import ru.practicum.shareit.item.dto.ItemDto;
@@ -26,6 +28,12 @@ public class ItemController {
         itemDto.setOwner(ownerId);
         log.info("itemDto = {} in controller", itemDto);
         return itemService.addItem(itemDto);
+    }
+
+    @PostMapping("/{itemId}/comment")
+    public Comment addComment(@PathVariable int itemId, @RequestBody CommentRequest commentRequest,
+                              @RequestHeader("X-Sharer-User-Id") int authorId) {
+        return itemService.addComment(itemId, commentRequest, authorId);
     }
 
     @PatchMapping("/{itemId}")
@@ -53,6 +61,10 @@ public class ItemController {
         log.info("in controller text = {}", text);
         return itemService.searchAvailableItems(text);
     }
+   /* @PostMapping("/{itemId}/comment")
+    public Comment addComment(@PathVariable int itemId, @RequestBody CommentRequest commentRequest, @RequestHeader int bookerId) {
+        return itemService.addComment(itemId, commentRequest, bookerId);
+    } */
 
     @ExceptionHandler(NotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)

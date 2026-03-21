@@ -3,6 +3,12 @@ package ru.practicum.shareit.item;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import ru.practicum.shareit.booking.Booking;
+import ru.practicum.shareit.booking.BookingRepository;
+import ru.practicum.shareit.booking.Status;
+import ru.practicum.shareit.comment.Comment;
+import ru.practicum.shareit.comment.CommentRepository;
+import ru.practicum.shareit.comment.CommentRequest;
 import ru.practicum.shareit.exceptions.DataBaseException;
 import ru.practicum.shareit.exceptions.NotFoundException;
 import ru.practicum.shareit.exceptions.ValidationException;
@@ -11,10 +17,14 @@ import ru.practicum.shareit.item.dto.ItemDtoMapper;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.request.ItemRequestService;
 import ru.practicum.shareit.user.User;
+import ru.practicum.shareit.user.UserRepository;
 import ru.practicum.shareit.user.UserService;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -25,6 +35,45 @@ public class ItemService {
     private final UserService userService;
     private final ItemRequestService itemRequestService;
     private final ItemRepository itemRepository;
+    private final CommentRepository commentRepository;
+    private final UserRepository userRepository;
+    private final BookingRepository bookingRepository;
+
+    public Comment addComment(int itemId, CommentRequest commentRequest, int authorId) {
+        Item item = itemRepository.findById(itemId).orElseThrow(() -> new DataBaseException("Такой Item не найден"));
+        log.info("in service item = {}", item);
+
+        Comment comment = new Comment();
+        comment.setText(commentRequest.getText());
+        comment.setItem(item);
+        log.info("in service comment = {}", comment);
+        Optional<User> userOptional = userRepository.findById(authorId);
+        if (!userOptional.isPresent()) {
+            throw new DataBaseException("User not found");
+        }
+
+        User author = userOptional.get();
+        log.info("====****authorId=====****{}", author.getId());
+        comment.setAuthorName(author.getName());
+        comment.setCreated(Instant.now());
+
+        // Проверка, что пользователь действительно брал вещь в аренду
+        if (!userHasRentalHistory(item, author)) {
+            throw new DataBaseException("User has not rented the item");
+        }
+
+        return commentRepository.save(comment);
+    }
+
+    private boolean userHasRentalHistory(Item item, User author) {
+        Booking booking = bookingRepository.findByItemAndBooker(item, author);
+        log.info("boooooking booking = {}", booking);
+        boolean isBookerItem = booking.getStatus().equals(Status.APPROVED);
+        log.info("******!!!!!---isBookerItem =================={}", isBookerItem);
+        return isBookerItem;
+
+    }
+
 
     public Item addItem(ItemDto itemDto) {
         if (!validationItemDto(itemDto)) {

@@ -1,10 +1,15 @@
 package ru.practicum.shareit.item.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import ru.practicum.shareit.booking.Booking;
+import ru.practicum.shareit.comment.Comment;
 import ru.practicum.shareit.request.ItemRequest;
 import ru.practicum.shareit.user.User;
+
+import java.util.List;
 
 @Data
 @EqualsAndHashCode(of = {"id"})
@@ -24,13 +29,27 @@ public class Item {
     @Column(name = "available")
     private Boolean available; // — статус о том, доступна или нет вещь для аренды;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "ownerId")
     private User owner; //— владелец вещи;
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "itemRequestId")
     private ItemRequest request; //— если вещь была создана по запросу другого пол
+
+    @OneToMany(mappedBy = "item", fetch = FetchType.LAZY) // item-название поля модели Booking
+    @JsonIgnore
+    private List<Booking> bookings; // список всех бронирований для вещи
+
+    @Transient
+    private Booking lastBooking; // последнее бронирование
+
+    @Transient
+    private Booking nextBooking; // следующее бронирование
+
+    @OneToMany(mappedBy = "item", fetch = FetchType.LAZY) // item-название поля модели Comment
+    @JsonIgnore
+    private List<Comment> comments; // комментарии к вещи
 
     public Item(String name, String description, Boolean available) {
         this.name = name;
