@@ -54,7 +54,7 @@ public class BookingService {
         } else {
             booking.setStatus(Status.REJECTED);
         }
-        return booking;
+        return bookingRepository.save(booking);
     }
 
     public Booking getBookingByBookerIdOrOwnerId(int bookingId, int bookerIdOrOwnerId) {

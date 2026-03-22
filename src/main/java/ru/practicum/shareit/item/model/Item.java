@@ -2,8 +2,7 @@ package ru.practicum.shareit.item.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 import ru.practicum.shareit.booking.Booking;
 import ru.practicum.shareit.comment.Comment;
 import ru.practicum.shareit.request.ItemRequest;
@@ -11,7 +10,8 @@ import ru.practicum.shareit.user.User;
 
 import java.util.List;
 
-@Data
+@Setter
+@Getter
 @EqualsAndHashCode(of = {"id"})
 @Entity
 @Table(name = "items")
@@ -37,19 +37,13 @@ public class Item {
     @JoinColumn(name = "itemRequestId")
     private ItemRequest request; //— если вещь была создана по запросу другого пол
 
-    @OneToMany(mappedBy = "item", fetch = FetchType.LAZY) // item-название поля модели Booking
+    @OneToMany(mappedBy = "item", fetch = FetchType.EAGER) // item-название поля модели Booking
     @JsonIgnore
     private List<Booking> bookings; // список всех бронирований для вещи
 
+    @OneToMany(mappedBy = "item", fetch = FetchType.EAGER) // item-название поля модели Comment
     @Transient
-    private Booking lastBooking; // последнее бронирование
-
-    @Transient
-    private Booking nextBooking; // следующее бронирование
-
-    @OneToMany(mappedBy = "item", fetch = FetchType.LAZY) // item-название поля модели Comment
-    @JsonIgnore
-    private List<Comment> comments; // комментарии к вещи
+    private List<Comment> comments;  // комментарии к вещи
 
     public Item(String name, String description, Boolean available) {
         this.name = name;
@@ -58,5 +52,18 @@ public class Item {
     }
 
     public Item() {
+    }
+
+    @Override
+    public String toString() {
+        return "Item{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", available=" + available +
+                ", owner=" + owner +
+                ", request=" + request +
+                ", bookings=" + bookings +
+                '}';
     }
 }

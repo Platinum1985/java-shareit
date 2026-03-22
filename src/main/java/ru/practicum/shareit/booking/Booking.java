@@ -1,14 +1,14 @@
 package ru.practicum.shareit.booking;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.User;
 
 import java.time.LocalDateTime;
 
-@Data
+@Setter
+@Getter
 @EqualsAndHashCode(of = {"id"})
 @Entity
 @Table(name = "bookings")
@@ -47,7 +47,6 @@ public class Booking {
     public Booking() {
 
     }
-
     @Override
     public String toString() {
         return "Booking{" +

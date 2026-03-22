@@ -18,6 +18,16 @@ public final class ItemDtoMapper {
                 item.getOwner().getId(),
                 item.getRequest() != null ? item.getRequest().getId() : 0);
     }
+    public static ItemForOwnerGetDto toItemForOwnerGetDto(Item item) {
+        log.info("item in toItemForOwnerGetDto = {}", item);
+        return new ItemForOwnerGetDto(
+                item.getId(),
+                item.getName(),
+                item.getDescription(),
+                item.getAvailable(),
+                item.getOwner(),
+                item.getRequest());
+    }
 
     public static Item toItem(ItemDto itemDto) {
         return new Item(

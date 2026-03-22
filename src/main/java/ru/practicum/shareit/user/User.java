@@ -1,10 +1,10 @@
 package ru.practicum.shareit.user;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
-@Data
+@Setter
+@Getter
 @EqualsAndHashCode(of = {"id"})
 @Entity
 @Table(name = "users")
@@ -27,5 +27,14 @@ public class User {
     }
 
     public User() {
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                '}';
     }
 }

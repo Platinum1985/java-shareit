@@ -9,8 +9,6 @@ import java.util.List;
 
 @Repository
 public interface ItemRepository extends JpaRepository<Item, Integer> {
-    // Здесь можно добавить дополнительные методы для работы с пользователями
-    // boolean existsByEmail(String email);
     List<Item> findByOwner(User owner);
 }
 

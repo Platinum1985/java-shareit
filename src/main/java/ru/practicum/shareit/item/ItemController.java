@@ -9,6 +9,7 @@ import ru.practicum.shareit.comment.CommentRequest;
 import ru.practicum.shareit.exceptions.NotFoundException;
 import ru.practicum.shareit.exceptions.ValidationException;
 import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.item.dto.ItemForOwnerGetDto;
 import ru.practicum.shareit.item.model.Item;
 
 import java.util.List;
@@ -30,6 +31,11 @@ public class ItemController {
         return itemService.addItem(itemDto);
     }
 
+    @GetMapping("/{itemId}")
+    public ItemForOwnerGetDto getItemByOwnerId(@PathVariable int itemId, @RequestHeader("X-Sharer-User-Id") int ownerId) {
+        return itemService.getItemByOwner(itemId, ownerId);
+    }
+
     @PostMapping("/{itemId}/comment")
     public Comment addComment(@PathVariable int itemId, @RequestBody CommentRequest commentRequest,
                               @RequestHeader("X-Sharer-User-Id") int authorId) {
@@ -46,10 +52,10 @@ public class ItemController {
         return itemService.patchItem(itemDto, ownerId);
     }
 
-    @GetMapping("/{itemId}")
+   /* @GetMapping("/{itemId}")
     public ItemDto getItemById(@PathVariable int itemId) {
         return itemService.getItemById(itemId);
-    }
+    } */
 
     @GetMapping
     public List<Item> getAllItemsForOwner(@RequestHeader("X-Sharer-User-Id") int ownerId) {

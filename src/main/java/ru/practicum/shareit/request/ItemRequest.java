@@ -19,7 +19,7 @@ public class ItemRequest {
     @Column(name = "description")
     private String description;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "requestorId")
     private User requestor; // пользователь создавший запрос
 
