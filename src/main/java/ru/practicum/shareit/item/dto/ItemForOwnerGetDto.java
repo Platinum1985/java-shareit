@@ -1,8 +1,6 @@
 package ru.practicum.shareit.item.dto;
 
-import io.micrometer.core.ipc.http.HttpSender;
 import lombok.Data;
-import org.apache.catalina.connector.Request;
 import ru.practicum.shareit.booking.Booking;
 import ru.practicum.shareit.comment.Comment;
 import ru.practicum.shareit.request.ItemRequest;
@@ -24,12 +22,12 @@ public class ItemForOwnerGetDto {
     private Booking nextBooking;
 
     public ItemForOwnerGetDto(int id, String name, String description, Boolean available, User owner, ItemRequest request) {
-        this.id=id;
-        this.name=name;
-        this.description=description;
-        this.available=available;
-        this.owner=owner;
-        this.request=request;
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.available = available;
+        this.owner = owner;
+        this.request = request;
     }
 }
 
