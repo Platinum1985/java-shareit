@@ -18,7 +18,7 @@ public class ItemRequestService {
     private final UserRepository userRepository;
 
     public ItemRequest addItemRequest(ItemRequestDto itemRequestDto, int requestor) {
-        User reqUser = userRepository.findById(requestor).orElseThrow(()->new DataBaseException("User-Requestor не найден"));
+        User reqUser = userRepository.findById(requestor).orElseThrow(() -> new DataBaseException("User-Requestor не найден"));
         return itemRequestRepository.save(ItemRequestMapper.toItemRequest(itemRequestDto, reqUser));
     }
 

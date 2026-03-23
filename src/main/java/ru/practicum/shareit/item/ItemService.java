@@ -44,7 +44,7 @@ public class ItemService {
         Item item = itemRepository.findById(itemId).orElseThrow(() -> new NotFoundException("Item не найден"));
         log.info("-----------itemId={} ________-----ownerId={}", itemId, ownerId);
         log.info("item in service*************** ==============={}", item);
-        ItemForOwnerGetDto itemForOwnerGetDto=ItemDtoMapper.toItemForOwnerGetDto(item);
+        ItemForOwnerGetDto itemForOwnerGetDto = ItemDtoMapper.toItemForOwnerGetDto(item);
         if (item.getOwner().equals(owner)) {
 
 

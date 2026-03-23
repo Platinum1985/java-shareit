@@ -47,6 +47,7 @@ public class Booking {
     public Booking() {
 
     }
+
     @Override
     public String toString() {
         return "Booking{" +
