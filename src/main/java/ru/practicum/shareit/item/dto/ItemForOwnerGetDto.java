@@ -28,7 +28,7 @@ public class ItemForOwnerGetDto {
         this.available = available;
         this.owner = owner;
         this.request = request;
-        this.comments=comments; // добавил
+        this.comments = comments;
     }
 }
 
