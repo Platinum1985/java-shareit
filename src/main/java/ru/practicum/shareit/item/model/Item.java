@@ -37,11 +37,11 @@ public class Item {
     @JoinColumn(name = "itemRequestId")
     private ItemRequest request; //— если вещь была создана по запросу другого пол
 
-    @OneToMany(mappedBy = "item", fetch = FetchType.EAGER) // item-название поля модели Booking
+    @OneToMany(mappedBy = "item", fetch = FetchType.LAZY) // item-название поля модели Booking
     @JsonIgnore
     private List<Booking> bookings; // список всех бронирований для вещи
 
-    @OneToMany(mappedBy = "item", fetch = FetchType.EAGER) // item-название поля модели Comment
+    @OneToMany(mappedBy = "item", fetch = FetchType.LAZY) // item-название поля модели Comment
     @Transient
     private List<Comment> comments;  // комментарии к вещи
 

@@ -83,12 +83,7 @@ public class ItemService {
         comment.setText(commentRequest.getText());
         comment.setItem(item);
         log.info("in service comment = {}", comment);
-        Optional<User> userOptional = userRepository.findById(authorId);
-        if (!userOptional.isPresent()) {
-            throw new DataBaseException("User not found");
-        }
-
-        User author = userOptional.get();
+        User author = userRepository.findById(authorId).orElseThrow(() -> new DataBaseException("User not found"));
         log.info("====****authorId=====****{}", author.getId());
         comment.setAuthorName(author.getName());
         comment.setCreated(Instant.now());

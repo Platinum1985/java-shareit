@@ -33,6 +33,7 @@ public class ItemController {
 
     @GetMapping("/{itemId}")
     public ItemForOwnerGetDto getItemByOwnerId(@PathVariable int itemId, @RequestHeader("X-Sharer-User-Id") int ownerId) {
+        log.info("itemId, userId in controller ItemForOwnerGetDto getItemByOwnerId ==={}  === {}",itemId, ownerId);
         return itemService.getItemByOwner(itemId, ownerId);
     }
 
@@ -52,10 +53,6 @@ public class ItemController {
         return itemService.patchItem(itemDto, ownerId);
     }
 
-   /* @GetMapping("/{itemId}")
-    public ItemDto getItemById(@PathVariable int itemId) {
-        return itemService.getItemById(itemId);
-    } */
 
     @GetMapping
     public List<Item> getAllItemsForOwner(@RequestHeader("X-Sharer-User-Id") int ownerId) {

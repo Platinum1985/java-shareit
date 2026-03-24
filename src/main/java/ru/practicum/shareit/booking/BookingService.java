@@ -25,8 +25,8 @@ public class BookingService {
     public Booking addBooking(BookingDto bookingDto, int bookerId) {
         log.info("bookingDto после контроллера = {}", bookingDto);
         User booker = userRepository.findById(bookerId).orElseThrow(() -> new DataBaseException("нет такого пользователя booker"));
-        if (itemRepository.findById(bookingDto.getItemId()).isEmpty()) {
-            throw new NotFoundException("Item not found");
+        if (!checkItemExists(bookingDto.getItemId())) {
+            throw new NotFoundException("элемент не найден");
         }
 
         if (!itemRepository.findById(bookingDto.getItemId()).get().getAvailable()) {
@@ -65,23 +65,23 @@ public class BookingService {
         return booking;
     }
 
-    public List<Booking> getBookerBookings(int userId, String state) {
+    public List<Booking> getBookerBookings(int userId, BookingState state) {
         log.info("Retrieving bookings for user {} with state: {}", userId, state);
 
-        if (state == null || state.equalsIgnoreCase("ALL")) {
+        if (state == null || state.equals(BookingState.ALL)) {
             return bookingRepository.findAllByBookerIdOrderByStartDesc(userId);
-        } else if (state.equals("CURRENT")) {
+        } else if (state.equals(BookingState.CURRENT)) {
             LocalDateTime now = LocalDateTime.now();
             return bookingRepository.findByBookerIdAndStartBeforeAndEndAfterOrderByStartDesc(userId, now, now);
-        } else if (state.equals("PAST")) {
+        } else if (state.equals(BookingState.PAST)) {
             LocalDateTime now = LocalDateTime.now();
             return bookingRepository.findByBookerIdAndEndBeforeOrderByStartDesc(userId, now);
-        } else if (state.equals("FUTURE")) {
+        } else if (state.equals(BookingState.FUTURE)) {
             LocalDateTime now = LocalDateTime.now();
             return bookingRepository.findByBookerIdAndStartAfterOrderByStartDesc(userId, now);
-        } else if (state.equals("WAITING")) {
+        } else if (state.equals(BookingState.WAITING)) {
             return bookingRepository.findByBookerIdAndStatusOrderByStartDesc(userId, Status.WAITING);
-        } else if (state.equals("REJECTED")) {
+        } else if (state.equals(BookingState.REJECTED)) {
             return bookingRepository.findByBookerIdAndStatusOrderByStartDesc(userId, Status.REJECTED);
         } else {
             throw new ValidationException("Invalid state parameter");
@@ -134,5 +134,9 @@ public class BookingService {
         }
 
         return true;
+    }
+
+    public boolean checkItemExists(int itemId) {
+        return itemRepository.findById(itemId).isPresent();
     }
 }

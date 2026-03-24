@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-import ru.practicum.shareit.exceptions.DataBaseException;
+import ru.practicum.shareit.exceptions.DuplicateEmailException;
 import ru.practicum.shareit.exceptions.NotFoundException;
 import ru.practicum.shareit.exceptions.ValidationException;
 
@@ -13,7 +13,7 @@ import ru.practicum.shareit.exceptions.ValidationException;
 @RequiredArgsConstructor
 public class UserService {
 
-    private final UserStorage userStorage;
+
     private final UserRepository userRepository;
 
     public User createUser(UserDto userDto) {
@@ -22,7 +22,7 @@ public class UserService {
             throw new ValidationException("Некорректно заполнены поля");
         }
         if (userRepository.existsByEmail(user.getEmail())) {
-            throw new DataBaseException("Такой email уже используется");
+            throw new DuplicateEmailException("Такой email уже используется");
         }
         log.info("user = {} in service", user);
         return userRepository.save(user);
@@ -36,7 +36,7 @@ public class UserService {
             throw new NotFoundException("Пользователь с таким id не найден");
         }
         if (userRepository.existsByEmail(user.getEmail())) {
-            throw new DataBaseException("Такой email уже используется");
+            throw new DuplicateEmailException("Такой email уже используется");
         }
         User existUserRep = userRepository.getReferenceById(userId);
         if (user.getName() != null && !user.getName().isBlank()) {

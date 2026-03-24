@@ -36,7 +36,7 @@ public class BookingController {
     }
 
     @GetMapping
-    public List<Booking> getBookerBookings(@RequestHeader("X-Sharer-User-Id") int bookerId, @RequestParam(value = "state", required = false) String state) {
+    public List<Booking> getBookerBookings(@RequestHeader("X-Sharer-User-Id") int bookerId, @RequestParam(value = "state", required = false) BookingState state) {
         log.info("Getting bookings for booker {} with state: {}", bookerId, state);
         return bookingService.getBookerBookings(bookerId, state);
     }
@@ -65,3 +65,4 @@ public class BookingController {
         return Map.of("error", e.getMessage());
     }
 }
+
