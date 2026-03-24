@@ -33,7 +33,7 @@ public class ItemController {
 
     @GetMapping("/{itemId}")
     public ItemForOwnerGetDto getItemByOwnerId(@PathVariable int itemId, @RequestHeader("X-Sharer-User-Id") int ownerId) {
-        log.info("itemId, userId in controller ItemForOwnerGetDto getItemByOwnerId ==={}  === {}",itemId, ownerId);
+        log.info("itemId, userId in controller ItemForOwnerGetDto getItemByOwnerId ==={}  === {}", itemId, ownerId);
         return itemService.getItemByOwner(itemId, ownerId);
     }
 

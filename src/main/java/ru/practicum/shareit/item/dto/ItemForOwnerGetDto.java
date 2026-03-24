@@ -21,13 +21,14 @@ public class ItemForOwnerGetDto {
     private Booking lastBooking;
     private Booking nextBooking;
 
-    public ItemForOwnerGetDto(int id, String name, String description, Boolean available, User owner, ItemRequest request) {
+    public ItemForOwnerGetDto(int id, String name, String description, Boolean available, User owner, ItemRequest request, List<Comment> comments) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.available = available;
         this.owner = owner;
         this.request = request;
+        this.comments=comments; // добавил
     }
 }
 

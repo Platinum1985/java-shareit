@@ -42,7 +42,7 @@ public class Item {
     private List<Booking> bookings; // список всех бронирований для вещи
 
     @OneToMany(mappedBy = "item", fetch = FetchType.LAZY) // item-название поля модели Comment
-    @Transient
+    @JsonIgnore
     private List<Comment> comments;  // комментарии к вещи
 
     public Item(String name, String description, Boolean available) {

@@ -140,12 +140,6 @@ public class ItemService {
         }
     }
 
-    public ItemDto getItemById(int itemId) {
-        ItemDto itemDto = ItemDtoMapper.toItemDto(itemRepository.findById(itemId).orElseThrow(() -> new NotFoundException("Item not found")));
-        log.info("itemDto in service = {}", itemDto);
-        return itemDto;
-    }
-
     public List<Item> getAllItemsForOwner(int ownerId) {
         User owner = userService.getUserById(ownerId);
         System.out.println("Полученный пользователь: " + owner);

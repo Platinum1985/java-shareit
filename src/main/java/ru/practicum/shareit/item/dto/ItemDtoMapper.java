@@ -27,7 +27,9 @@ public final class ItemDtoMapper {
                 item.getDescription(),
                 item.getAvailable(),
                 item.getOwner(),
-                item.getRequest());
+                item.getRequest(),
+                item.getComments() //
+        );
     }
 
     public static Item toItem(ItemDto itemDto) {
