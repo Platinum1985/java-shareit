@@ -1,11 +1,11 @@
 CREATE TABLE IF NOT EXISTS users (
-    id INT PRIMARY KEY AUTO_INCREMENT,
+    id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS itemRequests (
-    id INT PRIMARY KEY AUTO_INCREMENT,
+    id SERIAL PRIMARY KEY,
     description TEXT,
     requestorId INT,
     created TIMESTAMP,
@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS itemRequests (
 );
 
 CREATE TABLE IF NOT EXISTS items (
-    id INT PRIMARY KEY AUTO_INCREMENT,
+    id SERIAL PRIMARY KEY,
     name VARCHAR(255),
     description TEXT,
     available BOOLEAN,
@@ -23,9 +23,8 @@ CREATE TABLE IF NOT EXISTS items (
     FOREIGN KEY (itemRequestId) REFERENCES itemRequests(id)
 );
 
-
 CREATE TABLE IF NOT EXISTS bookings (
-    id INT PRIMARY KEY AUTO_INCREMENT,
+    id SERIAL PRIMARY KEY,
     start_time TIMESTAMP WITHOUT TIME ZONE,
     end_time TIMESTAMP WITHOUT TIME ZONE,
     itemId INT,
@@ -36,7 +35,7 @@ CREATE TABLE IF NOT EXISTS bookings (
 );
 
 CREATE TABLE IF NOT EXISTS comments (
-    id INT PRIMARY KEY AUTO_INCREMENT,
+    id SERIAL PRIMARY KEY,
     text TEXT,
     itemId INT,
     authorName VARCHAR(255),
