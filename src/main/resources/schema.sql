@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS users (
-    id SERIAL PRIMARY KEY,
+    id SERIAL PRIMARY KEY,,
     name VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL
 );
@@ -22,6 +22,7 @@ CREATE TABLE IF NOT EXISTS items (
     FOREIGN KEY (ownerId) REFERENCES users(id),
     FOREIGN KEY (itemRequestId) REFERENCES itemRequests(id)
 );
+
 
 CREATE TABLE IF NOT EXISTS bookings (
     id SERIAL PRIMARY KEY,
