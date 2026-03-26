@@ -4,9 +4,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.shareit.comment.Comment;
+import ru.practicum.shareit.comment.CommentRequest;
 import ru.practicum.shareit.exceptions.NotFoundException;
 import ru.practicum.shareit.exceptions.ValidationException;
 import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.item.dto.ItemForOwnerGetDto;
 import ru.practicum.shareit.item.model.Item;
 
 import java.util.List;
@@ -28,6 +31,18 @@ public class ItemController {
         return itemService.addItem(itemDto);
     }
 
+    @GetMapping("/{itemId}")
+    public ItemForOwnerGetDto getItemByOwnerId(@PathVariable int itemId, @RequestHeader("X-Sharer-User-Id") int ownerId) {
+        log.info("itemId, userId in controller ItemForOwnerGetDto getItemByOwnerId ==={}  === {}", itemId, ownerId);
+        return itemService.getItemByOwner(itemId, ownerId);
+    }
+
+    @PostMapping("/{itemId}/comment")
+    public Comment addComment(@PathVariable int itemId, @RequestBody CommentRequest commentRequest,
+                              @RequestHeader("X-Sharer-User-Id") int authorId) {
+        return itemService.addComment(itemId, commentRequest, authorId);
+    }
+
     @PatchMapping("/{itemId}")
     @ResponseStatus(HttpStatus.OK)
     public Item updateItem(@PathVariable int itemId,
@@ -38,10 +53,6 @@ public class ItemController {
         return itemService.patchItem(itemDto, ownerId);
     }
 
-    @GetMapping("/{itemId}")
-    public ItemDto getItemById(@PathVariable int itemId) {
-        return itemService.getItemById(itemId);
-    }
 
     @GetMapping
     public List<Item> getAllItemsForOwner(@RequestHeader("X-Sharer-User-Id") int ownerId) {
@@ -69,6 +80,6 @@ public class ItemController {
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public Map<String, String> handleGeneralException(Exception e) {
-        return Map.of("error", "Произошла внутренняя ошибка сервера.");
+        return Map.of("error внутр ошибка бд", e.getMessage());
     }
 }
